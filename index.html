@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Personal EPA</title>
+<style>
+  body {
+    font-family: Arial;
+    margin: 0;
+    background: #0f172a;
+    color: white;
+
+    background:
+  linear-gradient(rgba(15,23,42,0.78),
+  rgba(25, 40, 75, 0.78)),
+  url("https://lh3.googleusercontent.com/d/1ecDmx7dSEj2eI8t7mftAh6YrlfwzoCMv");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  }
+
+  .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 25px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+  linear-gradient(
+    90deg,
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.1)
+  );
+  z-index: -1;
+}
+
+  .header-left { font-size: 25px; line-height: 1.5; }
+
+  .titulo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .logo { height: 200px; }
+
+  /* LOGIN */
+  .login {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-box {
+  background: rgba(30,41,59,0.82);
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  box-shadow: 0 0 25px rgba(0,0,0,0.35);
+}
+
+  input, select {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 4px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: white;
+  }
+
+  button {
+    padding: 7px 13px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+
+  .btn-verde  { background: #22c55e; }
+  .btn-gris   { background: #475569; }
+  .logout     { background: #ef4444; }
+  .btn-pdf    { background: #3b82f6; }
+  .btn-act    { background: #22c55e; }
+
+  /* TABS */
+  .tabs {
+    display: none;
+    gap: 0;
+    padding: 10px 15px 0;
+    background: #020617;
+  }
+
+  .tab-btn {
+    padding: 8px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    background: #1e293b;
+    color: #94a3b8;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .tab-btn.activo {
+    background: #0f172a;
+    color: white;
+    border-bottom: 2px solid #3b82f6;
+  }
+
+  .seccion { display: none; padding: 12px 15px; }
+
+  /* USUARIO + BADGES */
+  .user-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 6px 15px 4px;
+    background: #020617;
+  }
+
+  .user-name {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  /* BADGES SECTORES */
+  .estado-sectores {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .badge-sector {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 9px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .badge-ok {
+    background: #166534;
+    color: #86efac;
+  }
+
+  .badge-falta {
+    background: #7f1d1d;
+    color: #fca5a5;
+    animation: shake 1s infinite;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+  }
+
+  .badge-resumen {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-left: 4px;
+  }
+
+  /* BARRA FILTROS */
+  .filterbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 8px 15px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+  }
+
+  .filterbar label {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+  .filterbar select, .filterbar input[type="text"] {
+    font-size: 13px;
+    padding: 6px 8px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 5px;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    padding: 10px 15px;
+  }
+
+  .card {
+    background: #1e293b;
+    padding: 12px 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  /* TABLA */
+  table { width: 100%; border-collapse: collapse; }
+
+  th {
+    background: #1e293b;
+    padding: 9px 8px;
+    text-align: left;
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+  td {
+    padding: 8px 8px;
+    border-bottom: 1px solid #1e293b;
+    font-size: 13px;
+  }
+
+  .PRESENTE { background: #14532d; }
+  .FRANCO   { background: #854d0e; }
+  .LICENCIA { background: #1e40af; }
+  .AUSENTE  { background: #7f1d1d; }
+
+  /* MODALES */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #000000aa;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .modal-box {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 10px;
+    min-width: 280px;
+  }
+
+  .modal-box h3 { margin-top: 0; }
+
+  .modal-box input, .modal-box select {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    box-sizing: border-box;
+  }
+
+  .modal-actions { margin-top: 12px; display: flex; gap: 8px; }
+
+  /* ===== OBS CELL CON ADJUNTO ===== */
+  .obs-cell {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .obs-input {
+    background: transparent;
+    border: 1px solid #475569;
+    color: white;
+    border-radius: 4px;
+    padding: 3px 5px;
+    width: 100px;
+    font-size: 12px;
+  }
+
+  .btn-adjunto {
+    background: #334155;
+    border: 1px dashed #475569;
+    color: #94a3b8;
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .btn-adjunto:hover { background: #475569; color: white; }
+
+  .obs-thumb {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid #475569;
+  }
+
+  .obs-pdf-link {
+    font-size: 11px;
+    color: #60a5fa;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .obs-pdf-link:hover { text-decoration: underline; }
+
+  /* ZONA DROP HIGHLIGHT */
+  .drop-active {
+    border: 2px dashed #22c55e !important;
+    background: #0f2a1a !important;
+  }
+
+  /* SPINNER UPLOAD */
+  .upload-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid #334155;
+    border-top-color: #22c55e;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* MODAL IMAGEN GRANDE */
+  #modalImgOverlay {
+    display: none;
+    position: fixed;
+    top:0;left:0;width:100%;height:100%;
+    background:#000000cc;
+    z-index:2000;
+    justify-content:center;
+    align-items:center;
+  }
+  #modalImgOverlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 0 40px #000;
+  }
+  #modalImgOverlay .cerrar-img {
+    position:absolute;
+    top:20px;right:30px;
+    font-size:30px;
+    cursor:pointer;
+    color:white;
+  }  
+</style>
+</head>
+<body>
+
+<!-- ========== MODAL IMAGEN GRANDE ========== -->
+<div id="modalImgOverlay" onclick="cerrarImgModal()">
+  <span class="cerrar-img">✕</span>
+  <img id="modalImgGrande" src="" alt="">
+</div>
+
+<!-- ================= MODALES ================= -->
+
+<div class="modal-overlay" id="modalPass">
+  <div class="modal-box">
+    <h3>Cambiar contraseña</h3>
+    <input type="password" id="oldPass" placeholder="Contraseña actual">
+    <input type="password" id="newPass" placeholder="Nueva contraseña">
+    <div class="modal-actions">
+      <button class="btn-verde" onclick="cambiarPass()">Guardar</button>
+      <button class="logout" onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAlta">
+  <div class="modal-box">
+    <h3>Nuevo Personal</h3>
+    <input id="nJerarquia" placeholder="Jerarquía">
+    <input id="nNombre" placeholder="Nombre">
+    <input id="nTel" placeholder="Teléfono">
+    <input id="nFuncion" placeholder="Función">
+    <input id="nServicio" placeholder="Servicio">
+    <input id="nObs" placeholder="Observaciones">
+    <select id="nSector" onchange="actualizarSectorNombre()">
+      <option value="Personal-KSTM">Personal-KSTM</option>
+      <option value="COAD">COAD</option>
+      <option value="FINANZAS">FINANZAS</option>
+      <option value="SECRETARIA">SECRETARIA</option>
+      <option value="PAPE">PAPE</option>
+      <option value="COMB">COMB</option>
+    </select>
+    <select id="nSectorNombre" style="display:none;">
+      <option value="KSTM">KSTM</option>
+      <option value="DETALL">DETALL</option>
+    </select>
+    <input id="nDni" placeholder="DNI">
+    <input id="nPass" placeholder="Contraseña">
+    <div class="modal-actions">
+      <button class="btn-verde" onclick="crearPersonal()">Guardar</button>
+      <button class="logout" onclick="cerrarAlta()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+
+<div class="header">
+  <div class="header-left">
+    Prefectura Naval Argentina<br>
+    Autoridad Marítima<br>
+    Dirección de Tráfico Marítimo
+  </div>
+  <div class="titulo">PERSONAL EPA</div>
+  <img src="https://lh3.googleusercontent.com/d/1VHqyDaySBy7C63OJwC6R6iVShcSLlbbx" class="logo">
+</div>
+
+<!-- ================= LOGIN ================= -->
+
+<div class="login" id="login">
+  <div class="login-box">
+    <h2>Ingreso</h2>
+    <input type="text" id="dni" placeholder="DNI" onkeydown="if(event.key==='Enter') ingresar()"><br>
+    <input type="password" id="pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter') ingresar()"><br>
+    <button class="btn-verde" onclick="ingresar()">Ingresar</button>
+  </div>
+</div>
+
+<!-- ================= TABS ================= -->
+
+<div class="tabs" id="tabs">
+  <button class="tab-btn activo" onclick="mostrarTab('personal')">👥 Personal</button>
+  <button class="tab-btn" onclick="mostrarTab('historial')">📋 Historial</button>
+</div>
+
+<!-- ================= FILA USUARIO + BADGES ================= -->
+
+<div class="user-row" id="userRow" style="display:none;">
+  <span>👤</span>
+  <span class="user-name" id="usuario"></span>
+  <button class="btn-gris" onclick="mostrarCambioPass()">Cambiar contraseña</button>
+  <button class="btn-verde" id="btnAltaPersonal" style="display:none;" onclick="mostrarAlta()">+ Personal</button>
+  <div class="estado-sectores" id="estadoSectores"></div>
+</div>
+
+<!-- ================= PERSONAL ================= -->
+
+<div class="seccion" id="tabPersonal">
+
+  <div class="filterbar">
+    <label>Sector:</label>
+    <select id="filtroSector" onchange="filtrar()">
+      <option value="TODOS">Todos</option>
+      <option value="KSTM">KSTM</option>
+      <option value="DETALL">DETALL</option>
+      <option value="COAD">COAD</option>
+      <option value="FINANZAS">FINANZAS</option>
+      <option value="SECRETARIA">SECRETARIA</option>
+      <option value="PAPE">PAPE</option>
+      <option value="COMB">COMB</option>
+    </select>
+
+    <label>Estado:</label>
+    <select id="filtroEstado" onchange="filtrar()">
+      <option value="TODOS">Todos</option>
+      <option>PRESENTE</option>
+      <option>FRANCO</option>
+      <option>LICENCIA</option>
+      <option>AUSENTE</option>
+    </select>
+
+    <label>Función:</label>
+    <select id="filtroFuncion" onchange="filtrar()">
+      <option value="TODAS">Todas</option>
+    </select>
+
+    <input type="text" id="buscar" placeholder="Buscar..." oninput="filtrar()" style="width:160px;">
+
+    <button class="btn-act" id="btnActualizar" onclick="actualizar()">Actualizar</button>
+    <span id="refreshIndicator" title="Datos actualizados" style="opacity:0;transition:opacity 0.5s;font-size:12px;color:#22c55e;">✔ Actualizado</span>
+    <span id="spinnerActualizar" style="display:none;">
+      <svg width="20" height="20" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+        <circle cx="30" cy="30" r="24" fill="none" stroke="#334155" stroke-width="6"/>
+        <circle cx="30" cy="30" r="24" fill="none" stroke="#22c55e" stroke-width="6"
+          stroke-dasharray="80 76" stroke-linecap="round">
+          <animateTransform attributeName="transform" type="rotate"
+            from="0 30 30" to="360 30 30" dur="0.7s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </span>
+    <button class="btn-gris" id="btnVerTodos" style="display:none;" onclick="verTodos()">👁 Ver todos</button>
+    <button class="btn-pdf" onclick="exportarPDF()">Exportar PDF</button>
+
+    <select id="sectorGuardar" style="display:none;">
+      <option value="">-- Sector --</option>
+      <option value="KSTM">KSTM</option>
+      <option value="DETALL">DETALL</option>
+      <option value="COAD">COAD</option>
+      <option value="FINANZAS">FINANZAS</option>
+      <option value="SECRETARIA">SECRETARIA</option>
+      <option value="PAPE">PAPE</option>
+      <option value="COMB">COMB</option>
+    </select>
+
+    <span id="etiquetaSectorAdmin" style="display:none; background:#334155; padding:6px 10px; border-radius:5px; font-size:13px; color:#94a3b8;"></span>
+
+    <button class="btn-verde" id="btnGuardar" style="display:none;" onclick="guardarHistorial()">Guardar día</button>
+    <button class="logout" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+
+  <div class="cards">
+    <div class="card">Total: <span id="total">0</span></div>
+    <div class="card">Presentes: <span id="presentes">0</span></div>
+    <div class="card">Franco: <span id="franco">0</span></div>
+    <div class="card">Licencia: <span id="licencia">0</span></div>
+    <div class="card">Ausente: <span id="ausente">0</span></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Jerarquía</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Función</th>
+        <th>Estado</th>
+        <th>Servicio</th>
+        <th>Obs / Adjunto</th>
+        <th>Sector</th>
+      </tr>
+    </thead>
+    <tbody id="tabla"></tbody>
+  </table>
+</div>
+
+<!-- ================= HISTORIAL ================= -->
+
+<div class="seccion" id="tabHistorial">
+
+  <div class="filterbar">
+    <label>Fecha:</label>
+    <input type="date" id="fechaHistorial" style="background:#1e293b;color:white;border:1px solid #334155;border-radius:5px;padding:6px 8px;font-size:13px;color-scheme:dark;">
+
+    <label>Sector:</label>
+    <select id="sectorHistorial">
+      <option value="TODOS">Todos</option>
+      <option value="KSTM">KSTM</option>
+      <option value="DETALL">DETALL</option>
+      <option value="COAD">COAD</option>
+      <option value="FINANZAS">FINANZAS</option>
+      <option value="SECRETARIA">SECRETARIA</option>
+      <option value="PAPE">PAPE</option>
+      <option value="COMB">COMB</option>
+    </select>
+
+    <label>Estado:</label>
+    <select id="estadoHistorial">
+      <option value="TODOS">Todos</option>
+      <option>PRESENTE</option>
+      <option>FRANCO</option>
+      <option>LICENCIA</option>
+      <option>AUSENTE</option>
+    </select>
+
+    <button class="btn-verde" onclick="buscarHistorial()">Buscar</button>
+    <button class="btn-pdf" onclick="exportarPDFHistorial()">Exportar PDF</button>
+  </div>
+
+  <div id="spinnerHistorial" style="display:none; text-align:center; padding:40px;">
+    <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="24" fill="none" stroke="#1e293b" stroke-width="5"/>
+      <circle cx="30" cy="30" r="24" fill="none" stroke="#3b82f6" stroke-width="5"
+        stroke-dasharray="80 76" stroke-linecap="round" transform="rotate(-90 30 30)">
+        <animateTransform attributeName="transform" type="rotate"
+          from="0 30 30" to="360 30 30" dur="0.9s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+    <p style="color:#94a3b8; margin-top:10px; font-size:13px;">Buscando...</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Jerarquía</th>
+        <th>Nombre</th>
+        <th>Función</th>
+        <th>Estado</th>
+        <th>Servicio</th>
+        <th>Obs</th>
+        <th>Sector</th>
+      </tr>
+    </thead>
+    <tbody id="tablaHistorial"></tbody>
+  </table>
+</div>
+
+<!-- ================= INPUT FILE OCULTO ================= -->
+<input type="file" id="fileInputOculto" accept="image/*,application/pdf" style="display:none;">
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzFyn5wcNvHVKreGNHGyY8fJKqebHgR-z59d1w3LbliWr747BibxhuBIOQMxsCYZHMd/exec";
+
+// ImgBB API key (gratis, subida pública de imágenes)
+// Para PDFs se usa base64 embed o se sube a imgbb como imagen de previsualización
+const IMGBB_KEY = ""; // Podés poner tu clave acá si querés; sin clave se usa base64 local
+
+const SECTORES_DISPLAY = {
+  "Personal-KSTM": "KSTM",
+  "KSTM": "KSTM",
+  "DETALL": "DETALL",
+  "COAD": "COAD",
+  "FINANZAS": "FINANZAS",
+  "SECRETARIA": "SECRETARIA",
+  "PAPE": "PAPE",
+  "COMB": "COMB"
+};
+
+// Estado por defecto para filas sin estado asignado
+const ESTADO_DEFAULT = "FRANCO";
+
+let datosOriginal = [];
+let usuarioActual = {};
+let sectoresGuardadosHoy = {};
+
+// índice del row que está esperando upload
+let uploadPendingIdx = null;
+
+// ===== LOGIN =====
+async function ingresar() {
+  let dni  = document.getElementById("dni").value.trim();
+  let pass = document.getElementById("pass").value.trim();
+
+  let res  = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({ action:"login", dni, pass })
+  });
+
+  let data = await res.json();
+
+  if (data.ok) {
+    usuarioActual = { ...data, dni };
+
+    document.getElementById("login").style.display   = "none";
+    document.getElementById("tabs").style.display    = "flex";
+    document.getElementById("userRow").style.display = "flex";
+    document.getElementById("usuario").innerText     = data.nombre;
+
+    if (usuarioActual.admin) {
+      document.getElementById("btnGuardar").style.display      = "inline-block";
+      document.getElementById("btnAltaPersonal").style.display = "inline-block";
+
+      if (usuarioActual.superAdmin) {
+        document.getElementById("sectorGuardar").style.display = "inline-block";
+      } else {
+        document.getElementById("sectorGuardar").style.display = "none";
+        let etiqueta = document.getElementById("etiquetaSectorAdmin");
+        etiqueta.style.display = "inline-block";
+        etiqueta.textContent   = "Sector: " + (SECTORES_DISPLAY[data.sector] || data.sector);
+      }
+    }
+
+    document.getElementById("btnVerTodos").style.display = "inline-block";
+
+    let filtroSel = document.getElementById("filtroSector");
+    if (usuarioActual.sector) {
+      filtroSel.value = usuarioActual.sector;
+    }
+
+    mostrarTab("personal");
+    cargarDatos();
+    verificarEstado();
+    } else {
+    alert(data.message || "Error al ingresar");
+  }
+}
+
+// ===== VERIFICAR ESTADO DE SECTORES =====
+async function verificarEstado() {
+  try {
+    let res  = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action:"controlCarga" })
+    });
+    let data = await res.json();
+    sectoresGuardadosHoy = data.sectores || {};
+    renderBadges(sectoresGuardadosHoy);
+  } catch(e) {
+    console.error("Error verificarEstado:", e);
+  }
+}
+
+function renderBadges(sectores) {
+  let cont  = document.getElementById("estadoSectores");
+  let keys  = Object.keys(sectores);
+  let ok    = Object.values(sectores).filter(Boolean).length;
+  let total = keys.length;
+
+  cont.innerHTML = "";
+
+  keys.forEach(key => {
+    let cargado = sectores[key] || false;
+    let span    = document.createElement("span");
+    span.className   = "badge-sector " + (cargado ? "badge-ok" : "badge-falta");
+    span.textContent = (cargado ? "✔ " : "● ") + key;
+    cont.appendChild(span);
+  });
+
+  let res = document.createElement("span");
+  res.className   = "badge-resumen";
+  res.textContent = `| ${ok}/${total} sectores OK`;
+  cont.appendChild(res);
+}
+
+// ===== VER TODOS =====
+function verTodos() {
+  let filtroSel = document.getElementById("filtroSector");
+  if (filtroSel.value === "TODOS") {
+    filtroSel.value = usuarioActual.sector || "TODOS";
+    document.getElementById("btnVerTodos").textContent = "👁 Ver todos";
+  } else {
+    filtroSel.value = "TODOS";
+    document.getElementById("btnVerTodos").textContent = "🔒 Mi sector";
+  }
+  filtrar();
+}
+
+// ===== ACTUALIZAR =====
+async function actualizar() {
+  document.getElementById("btnActualizar").style.display    = "none";
+  document.getElementById("spinnerActualizar").style.display = "inline";
+  await cargarDatos();
+  await verificarEstado();
+  document.getElementById("btnActualizar").style.display    = "inline-block";
+  document.getElementById("spinnerActualizar").style.display = "none";
+}
+
+// ===== CARGAR PERSONAL =====
+async function cargarDatos() {
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({ action:"obtenerPersonal" }),
+    cache: "no-store"
+  });
+  datosOriginal = await res.json();
+
+  // ── FRANCO ORDINARIO POR DEFECTO ──
+  // Si una fila no tiene estado asignado, se setea FRANCO
+  datosOriginal.forEach(fila => {
+    let estado = (fila[4] || "").toString().trim().toUpperCase();
+    if (!["PRESENTE","FRANCO","LICENCIA","AUSENTE"].includes(estado)) {
+      fila[4] = ESTADO_DEFAULT;
+    }
+  });
+
+  poblarFunciones();
+  filtrar();
+}
+
+function poblarFunciones() {
+  let sel     = document.getElementById("filtroFuncion");
+  let actual  = sel.value;
+  let funcs   = [...new Set(datosOriginal.map(r => r[3]).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="TODAS">Todas</option>';
+  funcs.forEach(f => {
+    let o = document.createElement("option");
+    o.value = f; o.textContent = f;
+    sel.appendChild(o);
+  });
+  sel.value = actual;
+}
+
+// ===== FILTRAR Y RENDER =====
+function filtrar() {
+  let sector  = document.getElementById("filtroSector").value;
+  let estado  = document.getElementById("filtroEstado").value;
+  let funcion = document.getElementById("filtroFuncion").value;
+  let buscar  = document.getElementById("buscar").value.trim().toLowerCase();
+
+  let filtrados = datosOriginal.filter((f) => {
+    let okSector  = sector  === "TODOS"  || f[7] === sector;
+    let okEstado  = estado  === "TODOS"  || (f[4]||"").toUpperCase() === estado;
+    let okFuncion = funcion === "TODAS"  || f[3] === funcion;
+    let okBuscar  = !buscar || (f[1]||"").toLowerCase().includes(buscar);
+    return okSector && okEstado && okFuncion && okBuscar;
+  });
+
+  render(filtrados);
+}
+
+// ===== RENDER =====
+function render(datos) {
+  const ORDEN = ["PG","PM","PP","PR","SP","OP","OX","OA","AM","AP","AI","AS","AT","CI","CS","MO"];
+
+  function prioridad(j) {
+    if (!j) return 999;
+    let i = ORDEN.indexOf(String(j).substring(0,2).toUpperCase());
+    return i === -1 ? 999 : i;
+  }
+
+  datos.sort((a,b) => {
+    let d = prioridad(a[0]) - prioridad(b[0]);
+    return d !== 0 ? d : String(a[1]).localeCompare(String(b[1]));
+  });
+
+  let p=0, f=0, l=0, au=0;
+  let tbody = document.getElementById("tabla");
+  tbody.innerHTML = "";
+
+  datos.forEach(fila => {
+    let idx    = datosOriginal.indexOf(fila);
+    // Estado ya normalizado en cargarDatos; pero por si acaso
+    let estado = (fila[4] || ESTADO_DEFAULT).toUpperCase();
+
+    if      (estado === "PRESENTE") p++;
+    else if (estado === "FRANCO")   f++;
+    else if (estado === "LICENCIA") l++;
+    else au++;
+
+    let cls = estado === "PRESENTE" ? "PRESENTE" :
+              estado === "FRANCO"   ? "FRANCO"   :
+              estado === "LICENCIA" ? "LICENCIA"  : "AUSENTE";
+
+    let tr = document.createElement("tr");
+    tr.className = cls;
+    tr.setAttribute("data-idx", idx);
+
+    let tel = (fila[2] || "").toString().replace(/\D/g, "");
+    let telHTML = tel
+      ? `<a href="https://wa.me/54${tel}" target="_blank" style="color:#4ade80;text-decoration:none;">📱 ${fila[2]}</a>`
+      : "";
+
+    let esSuSector = usuarioActual.superAdmin || !usuarioActual.sector || fila[7] === usuarioActual.sector;
+    let esAdmin    = usuarioActual.admin;
+
+    // ── SELECT ESTADO (admin de su sector) ──
+    let celdaEstado = (esAdmin && esSuSector)
+      ? `<select onchange="cambiarEstado(${idx}, this.value)">
+           <option value="PRESENTE" ${estado==="PRESENTE"?"selected":""}>PRESENTE</option>
+           <option value="FRANCO"   ${estado==="FRANCO"  ?"selected":""}>FRANCO</option>
+           <option value="LICENCIA" ${estado==="LICENCIA"?"selected":""}>LICENCIA</option>
+           <option value="AUSENTE"  ${estado==="AUSENTE" ?"selected":""}>AUSENTE</option>
+         </select>`
+      : `<span>${estado}</span>`;
+
+    // ── CELDA OBS CON ADJUNTO ──
+    let celdaObs = buildObsCell(idx, fila[6] || "", esAdmin && esSuSector);
+
+    tr.innerHTML = `
+      <td>${fila[0]||""}</td>
+      <td>${fila[1]||""}</td>
+      <td>${telHTML}</td>
+      <td>${fila[3]||""}</td>
+      <td>${celdaEstado}</td>
+      <td>${fila[5]||""}</td>
+      <td></td>
+      <td>${SECTORES_DISPLAY[fila[7]] || fila[7]||""}</td>
+    `;
+
+    // Insertar celda obs como nodo (para preservar eventos)
+    let tdObs = tr.querySelectorAll("td")[6];
+    tdObs.innerHTML = "";
+    tdObs.appendChild(celdaObs);
+
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById("total").textContent     = datos.length;
+  document.getElementById("presentes").textContent = p;
+  document.getElementById("franco").textContent    = f;
+  document.getElementById("licencia").textContent  = l;
+  document.getElementById("ausente").textContent   = au;
+}
+
+// ===== CONSTRUIR CELDA OBS =====
+function buildObsCell(idx, obsValue, editable) {
+  let wrapper = document.createElement("div");
+  wrapper.className = "obs-cell";
+
+  // Separar texto de URL de adjunto
+  // Formato guardado: "texto||URL_ADJUNTO" o solo "texto" o solo "||URL"
+  let partes   = String(obsValue).split("||");
+  let textoObs = partes[0] || "";
+  let adjunto  = partes[1] || "";
+
+  if (editable) {
+    // Input texto
+    let inp = document.createElement("input");
+    inp.type  = "text";
+    inp.className = "obs-input";
+    inp.value = textoObs;
+    inp.placeholder = "Obs...";
+    inp.onchange = async () => {
+
+  let cur = String(datosOriginal[idx][6] || "").split("||");
+  let adj = cur[1] || "";
+
+  // actualizar local
+  datosOriginal[idx][6] =
+    inp.value + (adj ? "||" + adj : "");
+
+  let fila = datosOriginal[idx];
+
+  try {
+
+    // guardar también en Sheets
+    let res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "actualizarEstado",
+        nombre: fila[1],
+        sector: fila[7],
+        estado: fila[4],
+        obs: datosOriginal[idx][6],
+        dni: usuarioActual.dni
+      })
+    });
+
+    let data = await res.json();
+
+    if (data.ok) {
+      mostrarToast("Observación guardada", "ok");
+    } else {
+      mostrarToast("Error guardando observación", "err");
+    }
+
+  } catch(e) {
+
+    console.error(e);
+
+    mostrarToast(
+      "Error actualizando observación",
+      "err"
+    );
+  }
+};
+    wrapper.appendChild(inp);
+
+    // Botón adjuntar
+    let btnAdj = document.createElement("button");
+    btnAdj.className = "btn-adjunto";
+    btnAdj.title = "Adjuntar imagen o PDF (también podés arrastrar)";
+    btnAdj.innerHTML = "📎";
+    btnAdj.onclick = () => abrirSelector(idx, wrapper);
+    wrapper.appendChild(btnAdj);
+
+    // Zona drag & drop (todo el td)
+    // Se activa en setupDragDrop luego de insertar al DOM
+    wrapper.dataset.idx = idx;
+    wrapper.dataset.editable = "1";
+  } else {
+    // Solo lectura: mostrar texto
+    if (textoObs) {
+      let span = document.createElement("span");
+      span.textContent = textoObs;
+      span.style.fontSize = "12px";
+      wrapper.appendChild(span);
+    }
+  }
+
+  // Previsualizar adjunto existente
+  if (adjunto) {
+    renderAdjunto(wrapper, adjunto, idx, editable);
+  }
+
+  return wrapper;
+}
+
+// Renderiza la miniatura o link del adjunto existente
+function renderAdjunto(wrapper, url, idx, editable) {
+  wrapper.querySelectorAll(".obs-thumb, .obs-pdf-link, .btn-rm-adj, iframe").forEach(el => el.remove());
+  if (!url) return;
+
+  let isPDF = url.includes("/preview") || url.toLowerCase().includes(".pdf");
+
+  if (isPDF) {
+    let iframe = document.createElement("iframe");
+    iframe.src = url;
+    iframe.style.cssText = "width:120px;height:80px;border:1px solid #475569;border-radius:4px;";
+    iframe.setAttribute("allowfullscreen", "");
+    wrapper.appendChild(iframe);
+
+    let a = document.createElement("a");
+    a.href = url.replace("/preview", "/view");
+    a.target = "_blank";
+    a.className = "obs-pdf-link";
+    a.textContent = "↗ Abrir";
+    wrapper.appendChild(a);
+  } else {
+    let img = document.createElement("img");
+    img.src       = url;
+    img.className = "obs-thumb";
+    img.title     = "Ver imagen";
+    img.onclick   = () => abrirImgModal(url);
+    wrapper.appendChild(img);
+  }
+
+  if (editable) {
+    let btnRm = document.createElement("button");
+    btnRm.className   = "btn-adjunto btn-rm-adj";
+    btnRm.title       = "Quitar adjunto";
+    btnRm.textContent = "✕";
+    btnRm.style.color = "#f87171";
+    btnRm.onclick = async () => {
+      let cur = String(datosOriginal[idx][6] || "").split("||");
+      datosOriginal[idx][6] = cur[0]; // solo texto
+      renderAdjunto(wrapper, "", idx, editable);
+
+      // ✅ Persistir en Sheets
+      let fila = datosOriginal[idx];
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "actualizarEstado",
+            nombre: fila[1],
+            sector: fila[7],
+            estado: fila[4],
+            obs:    cur[0],
+            dni:    usuarioActual.dni
+          })
+        });
+        mostrarToast("Adjunto eliminado", "ok");
+      } catch(e) {
+        mostrarToast("Error eliminando adjunto", "err");
+      }
+    };
+    wrapper.appendChild(btnRm);
+  }
+}
+
+// ===== ABRIR SELECTOR DE ARCHIVO =====
+function abrirSelector(idx, wrapper) {
+  let fi = document.getElementById("fileInputOculto");
+  fi.value = "";
+  fi.onchange = () => {
+    if (fi.files[0]) procesarArchivo(fi.files[0], idx, wrapper);
+  };
+  fi.click();
+}
+
+// ===== PROCESAR ARCHIVO =====
+// Modificación en procesarArchivo
+async function procesarArchivo(file, idx, wrapper) {
+
+  console.log("INICIO SUBIDA");
+
+  const tiposPermitidos = [
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ];
+
+  if (!tiposPermitidos.includes(file.type)) {
+    alert("Tipo de archivo no permitido");
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert("Máximo 10MB");
+    return;
+  }
+
+  // ===== SPINNER =====
+
+  let spinner = document.createElement("span");
+
+  spinner.innerHTML = " ⏳";
+
+  spinner.id = "uploadSpinner";
+
+  wrapper.appendChild(spinner);
+
+  try {
+
+    let reader = new FileReader();
+
+    reader.onload = async function(e) {
+
+      try {
+
+        console.log("FILE LEIDO");
+
+        let base64 = e.target.result.split(",")[1];
+
+        console.log("BASE64 OK");
+
+        let response = await fetch(API_URL, {
+
+          method: "POST",
+
+          body: JSON.stringify({
+
+            action: "subirArchivo",
+
+            base64Data: base64,
+
+            fileName: file.name,
+
+            mimeType: file.type,
+
+            usuario: usuarioActual.nombre || usuarioActual.dni,
+
+            personal: datosOriginal[idx][1],
+
+            sector: datosOriginal[idx][7]
+          })
+        });
+
+        console.log("FETCH OK");
+
+        let data = await response.json();
+
+        console.log("RESPUESTA:", data);
+
+        spinner.remove();
+
+        if (!data.ok) {
+
+          alert(data.message || "Error subiendo");
+
+          return;
+        }
+
+        // conservar texto
+        let partes =
+          String(datosOriginal[idx][6] || "").split("||");
+
+        let textoObs = partes[0] || "";
+
+        datosOriginal[idx][6] =
+          textoObs + "||" + data.url;
+
+        renderAdjunto(
+          wrapper,
+          data.url,
+          idx,
+          true
+        );
+
+        // guardar obs
+        let fila = datosOriginal[idx];
+
+        await fetch(API_URL, {
+
+          method: "POST",
+
+          body: JSON.stringify({
+
+            action: "actualizarEstado",
+
+            nombre: fila[1],
+
+            sector: fila[7],
+
+            estado: fila[4],
+
+            obs: datosOriginal[idx][6],
+
+            dni: usuarioActual.dni
+          })
+        });
+
+        mostrarToast(
+          "Archivo guardado",
+          "ok"
+        );
+
+      } catch(err) {
+
+        spinner.remove();
+
+        console.error("ERROR INTERNO:", err);
+
+        alert("ERROR:\n" + err);
+      }
+    };
+
+    reader.readAsDataURL(file);
+
+  } catch(err) {
+
+    spinner.remove();
+
+    console.error("ERROR GENERAL:", err);
+
+    alert("ERROR GENERAL:\n" + err);
+  }
+}
+
+// ===== DRAG & DROP sobre td obs =====
+// Se inicializa después del render mediante delegación en tbody
+document.getElementById("tabla").addEventListener("dragover", (e) => {
+  let cell = e.target.closest("td");
+  if (!cell) return;
+  let obs = cell.querySelector("[data-editable='1']");
+  if (!obs) return;
+  e.preventDefault();
+  obs.classList.add("drop-active");
+});
+
+document.getElementById("tabla").addEventListener("dragleave", (e) => {
+  let cell = e.target.closest("td");
+  if (!cell) return;
+  let obs = cell.querySelector("[data-editable='1']");
+  if (obs) obs.classList.remove("drop-active");
+});
+
+document.getElementById("tabla").addEventListener("drop", (e) => {
+  e.preventDefault();
+  let cell = e.target.closest("td");
+  if (!cell) return;
+  let obs = cell.querySelector("[data-editable='1']");
+  if (!obs) return;
+  obs.classList.remove("drop-active");
+
+  let idx = parseInt(obs.dataset.idx);
+  let file = e.dataTransfer.files[0];
+  if (file) procesarArchivo(file, idx, obs);
+});
+
+// ===== MODAL IMAGEN =====
+function abrirImgModal(url) {
+  document.getElementById("modalImgGrande").src = url;
+  document.getElementById("modalImgOverlay").style.display = "flex";
+}
+function cerrarImgModal() {
+  document.getElementById("modalImgOverlay").style.display = "none";
+}
+
+// ===== CAMBIAR ESTADO =====
+// Actualiza local + persiste en Sheets al instante
+async function cambiarEstado(index, value) {
+  // 1. Actualizar local inmediatamente (UX responsiva)
+  datosOriginal[index][4] = value;
+
+  let tr = document.querySelector(`tr[data-idx="${index}"]`);
+  if (tr) {
+    tr.className = value === "PRESENTE" ? "PRESENTE" :
+                   value === "FRANCO"   ? "FRANCO"   :
+                   value === "LICENCIA" ? "LICENCIA"  : "AUSENTE";
+  }
+
+  recalcularContadores();
+
+  // 2. Mostrar indicador de guardado en la fila
+  let sel = tr ? tr.querySelector("select") : null;
+  if (sel) {
+    sel.style.opacity = "0.5";
+    sel.disabled = true;
+  }
+
+  // 3. Persistir en Sheets
+  try {
+    let fila = datosOriginal[index];
+    let res = await fetch(API_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "actualizarEstado",
+        nombre:  fila[1],
+        sector:  fila[7],
+        estado:  value,
+        obs:     String(fila[6]||"").split("||")[0],
+        dni:     usuarioActual.dni
+      })
+    });
+    let data = await res.json();
+    if (data.ok) {
+      mostrarToast(`✔ ${fila[1]} → ${value}`, "ok");
+    } else {
+      mostrarToast(`Error: ${data.message}`, "err");
+    }
+  } catch(e) {
+    mostrarToast("Sin conexión — cambio solo local", "err");
+  } finally {
+    if (sel) { sel.style.opacity = "1"; sel.disabled = false; }
+  }
+}
+
+function recalcularContadores() {
+  let p=0, f=0, l=0, au=0;
+  datosOriginal.forEach(r => {
+    let e = (r[4]||"").toUpperCase();
+    if      (e==="PRESENTE") p++;
+    else if (e==="FRANCO")   f++;
+    else if (e==="LICENCIA") l++;
+    else au++;
+  });
+  document.getElementById("presentes").textContent = p;
+  document.getElementById("franco").textContent    = f;
+  document.getElementById("licencia").textContent  = l;
+  document.getElementById("ausente").textContent   = au;
+}
+
+// ===== TOAST NOTIFICACIÓN =====
+function mostrarToast(msg, tipo) {
+  let t = document.getElementById("toastMsg");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "toastMsg";
+    t.style.cssText = `
+      position:fixed; bottom:24px; right:24px; z-index:9999;
+      padding:10px 18px; border-radius:8px; font-size:13px; font-weight:bold;
+      opacity:0; transition:opacity 0.3s; pointer-events:none;
+      box-shadow: 0 4px 15px #0008;
+    `;
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.background = tipo === "ok" ? "#166534" : "#7f1d1d";
+  t.style.color      = tipo === "ok" ? "#86efac" : "#fca5a5";
+  t.style.opacity    = "1";
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = "0"; }, 2500);
+}
+
+// ===== GUARDAR HISTORIAL =====
+// Nota: al guardar, separamos el texto de obs del adjunto base64.
+// En historial solo guardamos el texto (la imagen no se sube a Sheets por límite de celdas).
+async function guardarHistorial() {
+  let sectorElegido;
+
+  if (usuarioActual.superAdmin) {
+    sectorElegido = document.getElementById("sectorGuardar").value;
+    if (!sectorElegido) { alert("Elegí un sector antes de guardar"); return; }
+  } else {
+    sectorElegido = usuarioActual.sector;
+  }
+
+  // Clonar records limpiando base64 (solo guardar texto de obs)
+  let recordsLimpios = datosOriginal.map(r => {
+  let copia = [...r];
+  let partes = String(copia[6] || "").split("||");
+  let texto  = partes[0] || "";
+  let url    = partes[1] || "";
+
+  // ✅ Guardar "texto | URL" si hay adjunto, sino solo texto
+  copia[6] = url ? texto + "||" + url : texto;
+  return copia;
+});
+
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "guardarHistorial",
+      records: recordsLimpios,
+      dni: usuarioActual.dni,
+      admin: usuarioActual.admin,
+      sectorElegido: sectorElegido
+    })
+  });
+  let data = await res.json();
+  alert(data.mensaje || data.message || "Guardado");
+  if (data.ok) {
+    sectoresGuardadosHoy[sectorElegido] = true;
+    renderBadges(sectoresGuardadosHoy);
+    await verificarEstado(); // ← confirmar contra el servidor
+}
+}
+
+// ===== EXPORTAR PDF =====
+function exportarPDF() {
+  let sector  = document.getElementById("filtroSector").value;
+  let estado  = document.getElementById("filtroEstado").value;
+  let funcion = document.getElementById("filtroFuncion").value;
+  let buscar  = document.getElementById("buscar").value.trim().toLowerCase();
+
+  let filas = datosOriginal.filter(fila=>{
+    let okS = sector==="TODOS" || fila[7]===sector;
+    let okE = estado==="TODOS" || (fila[4]||"").toUpperCase()===estado;
+    let okF = funcion==="TODAS" || fila[3]===funcion;
+    let okB = !buscar || (fila[1]||"").toLowerCase().includes(buscar);
+    return okS && okE && okF && okB;
+  });
+
+  const ORDEN=["PG","PM","PP","PR","SP","OP","OX","OA","AM","AP","AI","AS","AT","CI","CS","MO"];
+  function prioridad(j){
+    if(!j) return 999;
+    let i=ORDEN.indexOf(String(j).substring(0,2).toUpperCase());
+    return i===-1 ? 999 : i;
+  }
+  filas.sort((a,b)=>{
+    let d=prioridad(a[0])-prioridad(b[0]);
+    return d!==0 ? d : String(a[1]).localeCompare(String(b[1]));
+  });
+
+  let presentes=0, franco=0, licencia=0, ausente=0;
+
+  let filasHTML = filas.map((r,i)=>{
+    let e=(r[4]||"").toUpperCase();
+    if(e==="PRESENTE") presentes++;
+    else if(e==="FRANCO") franco++;
+    else if(e==="LICENCIA") licencia++;
+    else ausente++;
+
+    // Solo texto obs (sin base64)
+    let obsTexto = String(r[6]||"").split("||")[0];
+
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${r[0]||""}</td>
+      <td>${r[1]||""}</td>
+      <td>${r[3]||""}</td>
+      <td>${r[4]||""}</td>
+      <td>${r[5]||""}</td>
+      <td>${obsTexto}</td>
+      <td>${SECTORES_DISPLAY[r[7]]||r[7]||""}</td>
+    </tr>`;
+  }).join("");
+
+  let fecha = new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});
+
+  let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Parte Diario Personal</title>
+  <style>
+  body{font-family:Arial;color:#000;margin:35px;font-size:11px;}
+  .encabezado{text-align:center;line-height:1.4;margin-bottom:20px;}
+  .encabezado h1{margin:4px 0;font-size:18px;}
+  .encabezado h2{margin:2px 0;font-size:14px;}
+  .info{width:100%;border-collapse:collapse;margin-bottom:18px;}
+  .info td{border:1px solid #000;padding:6px;font-weight:bold;}
+  .resumen{width:100%;border-collapse:collapse;margin-bottom:15px;}
+  .resumen td{border:1px solid #000;padding:6px;text-align:center;font-weight:bold;}
+  table{width:100%;border-collapse:collapse;}
+  thead{display:table-header-group;}
+  th{border:1px solid #000;padding:6px;font-size:10px;text-align:center;background:#fff;}
+  td{border:1px solid #000;padding:5px;font-size:10px;}
+  .pie{margin-top:40px;width:100%;}
+  .firma{margin-top:55px;width:300px;border-top:1px solid #000;text-align:center;padding-top:5px;}
+  @page{size:A4 landscape;margin:15mm;}
+  @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  </style></head><body>
+  <div class="encabezado">
+    <div>PREFECTURA NAVAL ARGENTINA</div>
+    <div>DIRECCIÓN DE TRÁFICO MARÍTIMO</div>
+    <h1>PARTE DIARIO DE PERSONAL</h1>
+    <h2>ESTADO DE DOTACIÓN</h2>
+  </div>
+  <table class="info"><tr>
+    <td>Fecha: ${fecha}</td>
+    <td>Sector: ${sector}</td>
+    <td>Total Personal: ${filas.length}</td>
+  </tr></table>
+  <table class="resumen"><tr>
+    <td>PRESENTES: ${presentes}</td>
+    <td>FRANCO: ${franco}</td>
+    <td>LICENCIA: ${licencia}</td>
+    <td>AUSENTE: ${ausente}</td>
+  </tr></table>
+  <table>
+  <thead><tr><th>N°</th><th>Jerarquía</th><th>Apellido y Nombre</th><th>Función</th><th>Estado</th><th>Servicio</th><th>Observaciones</th><th>Sector</th></tr></thead>
+  <tbody>${filasHTML}</tbody>
+  </table>
+  <div class="pie"><div class="firma">Firma y aclaración</div></div>
+  </body></html>`;
+
+  imprimirHTML(html);
+}
+
+function imprimirHTML(html) {
+  let old = document.getElementById("iframePrint");
+  if (old) old.remove();
+  let iframe = document.createElement("iframe");
+  iframe.id = "iframePrint";
+  iframe.style.cssText = "position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;border:none;";
+  document.body.appendChild(iframe);
+  let doc = iframe.contentWindow.document;
+  doc.open(); doc.write(html); doc.close();
+  iframe.onload = function() {
+    setTimeout(() => { iframe.contentWindow.focus(); iframe.contentWindow.print(); }, 500);
+  };
+}
+
+// ===== HISTORIAL =====
+async function buscarHistorial() {
+  let spinner = document.getElementById("spinnerHistorial");
+  let tabla   = document.querySelector("#tabHistorial table");
+  let tbody   = document.getElementById("tablaHistorial");
+
+  spinner.style.display = "block";
+  tabla.style.display   = "none";
+  tbody.innerHTML       = "";
+
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "historial",
+      fecha: document.getElementById("fechaHistorial").value,
+      sector: document.getElementById("sectorHistorial").value,
+      estado: document.getElementById("estadoHistorial").value
+    })
+  });
+  let data = await res.json();
+
+  spinner.style.display = "none";
+  tabla.style.display   = "";
+
+  data.forEach(f => {
+  let estado = (f[4]||"").toUpperCase();
+  let cls = estado==="PRESENTE" ? "PRESENTE" :
+            estado==="FRANCO"   ? "FRANCO"   :
+            estado==="LICENCIA" ? "LICENCIA"  : "AUSENTE";
+
+  let fechaStr = "";
+  try {
+    let d = new Date(f[0]);
+    fechaStr = d.toLocaleDateString("es-AR", {day:"2-digit",month:"2-digit",year:"numeric"});
+  } catch(e) { fechaStr = f[0]||""; }
+
+  // ✅ Separar texto y adjunto en obs
+  let partes   = String(f[6]||"").split("||");
+  let obsTexto = partes[0] || "";
+  let adjunto  = partes[1] || "";
+
+  let adjHTML = "";
+  if (adjunto) {
+    let isPDF = adjunto.includes("/preview");
+    adjHTML = isPDF
+      ? `<a href="${adjunto.replace('/preview','/view')}" target="_blank" class="obs-pdf-link">📄 PDF</a>`
+      : `<img src="${adjunto}" class="obs-thumb" onclick="abrirImgModal('${adjunto}')" title="Ver imagen">`;
+  }
+
+  tbody.innerHTML += `<tr class="${cls}">
+    <td>${fechaStr}</td>
+    <td>${f[1]||""}</td>
+    <td>${f[2]||""}</td>
+    <td>${f[3]||""}</td>
+    <td>${f[4]||""}</td>
+    <td>${f[5]||""}</td>
+    <td>${obsTexto} ${adjHTML}</td>
+    <td>${f[7]||""}</td>
+  </tr>`;
+});
+
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:20px;">Sin resultados</td></tr>`;
+  }
+}
+
+function exportarPDFHistorial(){
+  let filas=document.querySelectorAll("#tablaHistorial tr");
+  if(!filas.length){ alert("No hay datos para exportar"); return; }
+
+  let total=0,presentes=0,franco=0,licencia=0,ausente=0;
+  let filasHTML="";
+
+  filas.forEach((tr,i)=>{
+    let celdas=tr.querySelectorAll("td");
+    if(celdas.length<8) return;
+    total++;
+    let estado=(celdas[4].innerText||"").toUpperCase();
+    if(estado==="PRESENTE") presentes++;
+    else if(estado==="FRANCO") franco++;
+    else if(estado==="LICENCIA") licencia++;
+    else ausente++;
+    filasHTML += `<tr>
+      <td>${i+1}</td><td>${celdas[0].innerText}</td><td>${celdas[1].innerText}</td>
+      <td>${celdas[2].innerText}</td><td>${celdas[3].innerText}</td><td>${estado}</td>
+      <td>${celdas[5].innerText}</td><td>${celdas[6].innerText}</td><td>${celdas[7].innerText}</td>
+    </tr>`;
+  });
+
+  let fechaImpresion = new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  let fechaFiltro = document.getElementById("fechaHistorial").value || "Todas";
+  let sectorFiltro = document.getElementById("sectorHistorial").value;
+  let estadoFiltro = document.getElementById("estadoHistorial").value;
+
+  let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Historial Personal</title>
+  <style>
+  body{font-family:Arial;color:#000;margin:35px;font-size:11px;}
+  .encabezado{text-align:center;line-height:1.4;margin-bottom:20px;}
+  .encabezado h1{margin:4px 0;font-size:18px;}
+  .encabezado h2{margin:2px 0;font-size:14px;}
+  .info{width:100%;border-collapse:collapse;margin-bottom:15px;}
+  .info td{border:1px solid #000;padding:6px;font-weight:bold;}
+  .resumen{width:100%;border-collapse:collapse;margin-bottom:15px;}
+  .resumen td{border:1px solid #000;padding:6px;text-align:center;font-weight:bold;}
+  table{width:100%;border-collapse:collapse;}
+  thead{display:table-header-group;}
+  th{border:1px solid #000;padding:6px;font-size:10px;text-align:center;background:#fff;}
+  td{border:1px solid #000;padding:5px;font-size:10px;}
+  .pie{margin-top:40px;}
+  .firma{margin-top:55px;width:300px;border-top:1px solid #000;text-align:center;padding-top:5px;}
+  @page{size:A4 landscape;margin:15mm;}
+  @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  </style></head><body>
+  <div class="encabezado">
+    <div>PREFECTURA NAVAL ARGENTINA</div>
+    <div>DIRECCIÓN DE TRÁFICO MARÍTIMO</div>
+    <h1>HISTORIAL DE PERSONAL</h1>
+    <h2>CONSULTA DE REGISTROS</h2>
+  </div>
+  <table class="info"><tr>
+    <td>Fecha consultada: ${fechaFiltro}</td>
+    <td>Sector: ${sectorFiltro}</td>
+    <td>Estado: ${estadoFiltro}</td>
+    <td>Impresión: ${fechaImpresion}</td>
+  </tr></table>
+  <table class="resumen"><tr>
+    <td>TOTAL: ${total}</td>
+    <td>PRESENTES: ${presentes}</td>
+    <td>FRANCO: ${franco}</td>
+    <td>LICENCIA: ${licencia}</td>
+    <td>AUSENTE: ${ausente}</td>
+  </tr></table>
+  <table>
+  <thead><tr><th>N°</th><th>Fecha</th><th>Jerarquía</th><th>Nombre</th><th>Función</th><th>Estado</th><th>Servicio</th><th>Observaciones</th><th>Sector</th></tr></thead>
+  <tbody>${filasHTML}</tbody>
+  </table>
+  <div class="pie"><div class="firma">Firma y aclaración</div></div>
+  </body></html>`;
+
+  imprimirHTML(html);
+}
+
+// ===== CONTRASEÑA =====
+function mostrarCambioPass() { document.getElementById("modalPass").style.display = "flex"; }
+function cerrarModal()        { document.getElementById("modalPass").style.display = "none"; }
+
+async function cambiarPass() {
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "changePass",
+      dni: usuarioActual.dni,
+      oldPass: document.getElementById("oldPass").value,
+      newPass: document.getElementById("newPass").value
+    })
+  });
+  alert((await res.json()).message);
+  cerrarModal();
+}
+
+// ===== MODAL ALTA =====
+function actualizarSectorNombre() {
+  let hoja = document.getElementById("nSector").value;
+  let sel  = document.getElementById("nSectorNombre");
+  sel.style.display = hoja === "Personal-KSTM" ? "block" : "none";
+}
+
+function mostrarAlta() {
+  ["nJerarquia","nNombre","nTel","nFuncion","nServicio","nObs","nDni","nPass"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+
+  let nSector       = document.getElementById("nSector");
+  let nSectorNombre = document.getElementById("nSectorNombre");
+
+  if (!usuarioActual.superAdmin) {
+    let hojaPropia = usuarioActual.sector === "KSTM" || usuarioActual.sector === "DETALL"
+      ? "Personal-KSTM" : usuarioActual.sector;
+    nSector.value    = hojaPropia;
+    nSector.disabled = true;
+
+    if (hojaPropia === "Personal-KSTM") {
+      nSectorNombre.value    = usuarioActual.sector;
+      nSectorNombre.disabled = true;
+      nSectorNombre.style.display = "block";
+    } else {
+      nSectorNombre.style.display = "none";
+    }
+  } else {
+    nSector.disabled          = false;
+    nSectorNombre.disabled    = false;
+    nSectorNombre.style.display = nSector.value === "Personal-KSTM" ? "block" : "none";
+  }
+
+  document.getElementById("modalAlta").style.display = "flex";
+}
+function cerrarAlta() { document.getElementById("modalAlta").style.display = "none"; }
+
+async function crearPersonal() {
+  let sectorHoja   = document.getElementById("nSector").value;
+  let sectorNombre = sectorHoja === "Personal-KSTM"
+    ? document.getElementById("nSectorNombre").value
+    : sectorHoja;
+
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "crearPersonal",
+      sector: sectorHoja,
+      data: {
+        jerarquia:    document.getElementById("nJerarquia").value,
+        nombre:       document.getElementById("nNombre").value,
+        telefono:     document.getElementById("nTel").value,
+        funcion:      document.getElementById("nFuncion").value,
+        servicio:     document.getElementById("nServicio").value,
+        obs:          document.getElementById("nObs").value,
+        dni:          document.getElementById("nDni").value,
+        pass:         document.getElementById("nPass").value,
+        sectorNombre: sectorNombre
+      }
+    })
+  });
+  let data = await res.json();
+  alert(data.message);
+  if (data.ok) { cerrarAlta(); cargarDatos(); }
+}
+
+// ===== SESIÓN / TABS =====
+function cerrarSesion() {
+
+  // limpiar datos
+  usuarioActual = {};
+  datosOriginal = [];
+
+  // ocultar paneles
+  document.getElementById("tabs").style.display = "none";
+  document.getElementById("userRow").style.display = "none";
+  document.getElementById("tabPersonal").style.display = "none";
+  document.getElementById("tabHistorial").style.display = "none";
+
+  // mostrar login
+  document.getElementById("login").style.display = "flex";
+
+  // limpiar inputs
+  document.getElementById("dni").value = "";
+  document.getElementById("pass").value = "";
+
+  // limpiar tabla
+  document.getElementById("tabla").innerHTML = "";
+  document.getElementById("tablaHistorial").innerHTML = "";
+
+  // reset contadores
+  document.getElementById("total").textContent = "0";
+  document.getElementById("presentes").textContent = "0";
+  document.getElementById("franco").textContent = "0";
+  document.getElementById("licencia").textContent = "0";
+  document.getElementById("ausente").textContent = "0";
+
+  // ocultar botones admin
+  document.getElementById("btnGuardar").style.display = "none";
+  document.getElementById("btnAltaPersonal").style.display = "none";
+  document.getElementById("sectorGuardar").style.display = "none";
+  document.getElementById("etiquetaSectorAdmin").style.display = "none";
+
+  // reset filtros
+  document.getElementById("filtroSector").value = "TODOS";
+  document.getElementById("filtroEstado").value = "TODOS";
+  document.getElementById("filtroFuncion").innerHTML =
+    '<option value="TODAS">Todas</option>';
+
+  document.getElementById("buscar").value = "";
+
+  mostrarToast("Sesión cerrada", "ok");
+}
+
+function mostrarTab(tab) {
+  document.getElementById("tabPersonal").style.display  = tab==="personal"  ? "block" : "none";
+  document.getElementById("tabHistorial").style.display = tab==="historial" ? "block" : "none";
+
+  document.querySelectorAll(".tab-btn").forEach((btn, i) => {
+    btn.classList.toggle("activo", (i===0 && tab==="personal") || (i===1 && tab==="historial"));
+  });
+}
+</script>
+</body>
+</html>
