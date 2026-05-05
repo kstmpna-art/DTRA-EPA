@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Personal EPA</title>
+</head>
 <style>
-  body {
+body {
     font-family: Arial;
     margin: 0;
     background: #0f172a;
@@ -13,7 +14,7 @@
     background:
   linear-gradient(rgba(15,23,42,0.78),
   rgba(25, 40, 75, 0.78)),
-  url("https://lh3.googleusercontent.com/d/1ecDmx7dSEj2eI8t7mftAh6YrlfwzoCMv");
+  url(imagen/imagen1.png);
 
   background-size: cover;
   background-position: center;
@@ -369,7 +370,6 @@
     color:white;
   }  
 </style>
-</head>
 <body>
 
 <!-- ========== MODAL IMAGEN GRANDE ========== -->
@@ -431,7 +431,7 @@
     Dirección de Tráfico Marítimo
   </div>
   <div class="titulo">PERSONAL EPA</div>
-  <img src="https://lh3.googleusercontent.com/d/1VHqyDaySBy7C63OJwC6R6iVShcSLlbbx" class="logo">
+  <img class="logo" src="imagen/escudoDTRA.png">
 </div>
 
 <!-- ================= LOGIN ================= -->
@@ -619,7 +619,7 @@
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbygr9T3GqceZEqGYhVHzPzVho4dRnzp1dlynPIOx16fhWH_VB6s2y35YJzPAdBHhy8p/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyn9MuV--pnpmQGOOcvnNitXQc6WnzxVunw2wep_DfsbrOc2NKTCaomBLqAWsqI3qHO/exec";
 
 // ImgBB API key (gratis, subida pública de imágenes)
 // Para PDFs se usa base64 embed o se sube a imgbb como imagen de previsualización
@@ -1377,8 +1377,7 @@ async function guardarHistorial() {
   if (data.ok) {
     sectoresGuardadosHoy[sectorElegido] = true;
     renderBadges(sectoresGuardadosHoy);
-    await verificarEstado(); // ← confirmar contra el servidor
-}
+  }
 }
 
 // ===== EXPORTAR PDF =====
