@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Personal EPA</title>
-</head>
 <style>
-body {
+  body {
     font-family: Arial;
     margin: 0;
     background: #0f172a;
@@ -14,7 +13,7 @@ body {
     background:
   linear-gradient(rgba(15,23,42,0.78),
   rgba(25, 40, 75, 0.78)),
-  url(imagen/imagen1.png);
+  url("https://lh3.googleusercontent.com/d/1ecDmx7dSEj2eI8t7mftAh6YrlfwzoCMv");
 
   background-size: cover;
   background-position: center;
@@ -370,6 +369,7 @@ body {
     color:white;
   }  
 </style>
+</head>
 <body>
 
 <!-- ========== MODAL IMAGEN GRANDE ========== -->
@@ -431,7 +431,7 @@ body {
     Dirección de Tráfico Marítimo
   </div>
   <div class="titulo">PERSONAL EPA</div>
-  <img class="logo" src="imagen/escudoDTRA.png">
+  <img src="https://lh3.googleusercontent.com/d/1VHqyDaySBy7C63OJwC6R6iVShcSLlbbx" class="logo">
 </div>
 
 <!-- ================= LOGIN ================= -->
@@ -1377,7 +1377,8 @@ async function guardarHistorial() {
   if (data.ok) {
     sectoresGuardadosHoy[sectorElegido] = true;
     renderBadges(sectoresGuardadosHoy);
-  }
+    await verificarEstado(); // ← confirmar contra el servidor
+}
 }
 
 // ===== EXPORTAR PDF =====
