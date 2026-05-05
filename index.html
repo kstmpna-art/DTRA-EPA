@@ -248,6 +248,7 @@
   .PRESENTE { background: #14532d; }
   .FRANCO   { background: #854d0e; }
   .LICENCIA { background: #1e40af; }
+  .COMISIÓN { background: #302F2F;}
   .AUSENTE  { background: #7f1d1d; }
 
   /* MODALES */
@@ -485,6 +486,7 @@
       <option>PRESENTE</option>
       <option>FRANCO</option>
       <option>LICENCIA</option>
+      <option>COMISIÓN</option>
       <option>AUSENTE</option>
     </select>
 
@@ -532,6 +534,7 @@
     <div class="card">Presentes: <span id="presentes">0</span></div>
     <div class="card">Franco: <span id="franco">0</span></div>
     <div class="card">Licencia: <span id="licencia">0</span></div>
+     <div class="card">Comisión: <span id="ausente">0</span></div>
     <div class="card">Ausente: <span id="ausente">0</span></div>
   </div>
 
@@ -578,6 +581,7 @@
       <option>PRESENTE</option>
       <option>FRANCO</option>
       <option>LICENCIA</option>
+      <option>COMISIÓN</option>
       <option>AUSENTE</option>
     </select>
 
@@ -768,7 +772,7 @@ async function cargarDatos() {
   // Si una fila no tiene estado asignado, se setea FRANCO
   datosOriginal.forEach(fila => {
     let estado = (fila[4] || "").toString().trim().toUpperCase();
-    if (!["PRESENTE","FRANCO","LICENCIA","AUSENTE"].includes(estado)) {
+    if (!["PRESENTE","FRANCO","LICENCIA","COMISIÓN","AUSENTE"].includes(estado)) {
       fila[4] = ESTADO_DEFAULT;
     }
   });
@@ -823,7 +827,7 @@ function render(datos) {
     return d !== 0 ? d : String(a[1]).localeCompare(String(b[1]));
   });
 
-  let p=0, f=0, l=0, au=0;
+  let p=0, f=0, l=0, com=0,au=0;
   let tbody = document.getElementById("tabla");
   tbody.innerHTML = "";
 
@@ -834,11 +838,13 @@ function render(datos) {
 
     if      (estado === "PRESENTE") p++;
     else if (estado === "FRANCO")   f++;
+    else if (estado === "COMISIÓN") com++;
     else if (estado === "LICENCIA") l++;
     else au++;
 
     let cls = estado === "PRESENTE" ? "PRESENTE" :
               estado === "FRANCO"   ? "FRANCO"   :
+              estado === "COMISIÓN"   ? "COMISIÓN" : 
               estado === "LICENCIA" ? "LICENCIA"  : "AUSENTE";
 
     let tr = document.createElement("tr");
@@ -859,6 +865,7 @@ function render(datos) {
            <option value="PRESENTE" ${estado==="PRESENTE"?"selected":""}>PRESENTE</option>
            <option value="FRANCO"   ${estado==="FRANCO"  ?"selected":""}>FRANCO</option>
            <option value="LICENCIA" ${estado==="LICENCIA"?"selected":""}>LICENCIA</option>
+           <option value="COMISIÓN" ${estado==="COMISIÓN"?"selected":""}>COMISIÓN</option>
            <option value="AUSENTE"  ${estado==="AUSENTE" ?"selected":""}>AUSENTE</option>
          </select>`
       : `<span>${estado}</span>`;
@@ -885,11 +892,14 @@ function render(datos) {
     tbody.appendChild(tr);
   });
 
-  document.getElementById("total").textContent     = datos.length;
-  document.getElementById("presentes").textContent = p;
-  document.getElementById("franco").textContent    = f;
-  document.getElementById("licencia").textContent  = l;
-  document.getElementById("ausente").textContent   = au;
+  // DESPUÉS — con chequeo para que no rompa:
+document.getElementById("total").textContent     = datos.length;
+document.getElementById("presentes").textContent = p;
+document.getElementById("franco").textContent    = f;
+document.getElementById("licencia").textContent  = l;
+document.getElementById("ausente").textContent   = au;
+let elCom = document.getElementById("comision");
+if (elCom) elCom.textContent = com;
 }
 
 // ===== CONSTRUIR CELDA OBS =====
@@ -1261,6 +1271,7 @@ async function cambiarEstado(index, value) {
   if (tr) {
     tr.className = value === "PRESENTE" ? "PRESENTE" :
                    value === "FRANCO"   ? "FRANCO"   :
+                   value === "COMISIÓN"   ? "COMISIÓN"   :
                    value === "LICENCIA" ? "LICENCIA"  : "AUSENTE";
   }
 
@@ -1301,18 +1312,21 @@ async function cambiarEstado(index, value) {
 }
 
 function recalcularContadores() {
-  let p=0, f=0, l=0, au=0;
+  let p=0, f=0, l=0, au=0, com=0;
   datosOriginal.forEach(r => {
     let e = (r[4]||"").toUpperCase();
     if      (e==="PRESENTE") p++;
     else if (e==="FRANCO")   f++;
     else if (e==="LICENCIA") l++;
+    else if (e==="COMISION") com++;
     else au++;
   });
   document.getElementById("presentes").textContent = p;
   document.getElementById("franco").textContent    = f;
   document.getElementById("licencia").textContent  = l;
   document.getElementById("ausente").textContent   = au;
+  let elCom = document.getElementById("comision");
+  if (elCom) elCom.textContent = com;
 }
 
 // ===== TOAST NOTIFICACIÓN =====
@@ -1407,13 +1421,14 @@ function exportarPDF() {
     return d!==0 ? d : String(a[1]).localeCompare(String(b[1]));
   });
 
-  let presentes=0, franco=0, licencia=0, ausente=0;
+  let presentes=0, franco=0, licencia=0, comisión=0,ausente=0;
 
   let filasHTML = filas.map((r,i)=>{
     let e=(r[4]||"").toUpperCase();
     if(e==="PRESENTE") presentes++;
     else if(e==="FRANCO") franco++;
     else if(e==="LICENCIA") licencia++;
+    else if(e==="COMISIÓN") comisión++;
     else ausente++;
 
     // Solo texto obs (sin base64)
@@ -1467,6 +1482,7 @@ function exportarPDF() {
     <td>PRESENTES: ${presentes}</td>
     <td>FRANCO: ${franco}</td>
     <td>LICENCIA: ${licencia}</td>
+    <td>COMISIÓN: ${comisión}</td>
     <td>AUSENTE: ${ausente}</td>
   </tr></table>
   <table>
@@ -1521,6 +1537,7 @@ async function buscarHistorial() {
   let estado = (f[4]||"").toUpperCase();
   let cls = estado==="PRESENTE" ? "PRESENTE" :
             estado==="FRANCO"   ? "FRANCO"   :
+            estado==="COMISIÓN"   ? "COMISIÓN"   :
             estado==="LICENCIA" ? "LICENCIA"  : "AUSENTE";
 
   let fechaStr = "";
@@ -1563,7 +1580,7 @@ function exportarPDFHistorial(){
   let filas=document.querySelectorAll("#tablaHistorial tr");
   if(!filas.length){ alert("No hay datos para exportar"); return; }
 
-  let total=0,presentes=0,franco=0,licencia=0,ausente=0;
+  let total=0,presentes=0,franco=0,licencia=0,comisión=0,ausente=0;
   let filasHTML="";
 
   filas.forEach((tr,i)=>{
@@ -1574,6 +1591,7 @@ function exportarPDFHistorial(){
     if(estado==="PRESENTE") presentes++;
     else if(estado==="FRANCO") franco++;
     else if(estado==="LICENCIA") licencia++;
+    else if(estado==="COMISIÓN") comisión++;
     else ausente++;
     filasHTML += `<tr>
       <td>${i+1}</td><td>${celdas[0].innerText}</td><td>${celdas[1].innerText}</td>
@@ -1623,6 +1641,7 @@ function exportarPDFHistorial(){
     <td>PRESENTES: ${presentes}</td>
     <td>FRANCO: ${franco}</td>
     <td>LICENCIA: ${licencia}</td>
+    <td>COMISIÓN: ${comisión}</td>
     <td>AUSENTE: ${ausente}</td>
   </tr></table>
   <table>
@@ -1749,6 +1768,7 @@ function cerrarSesion() {
   document.getElementById("presentes").textContent = "0";
   document.getElementById("franco").textContent = "0";
   document.getElementById("licencia").textContent = "0";
+  document.getElementById("Comisión").textContent = "0";
   document.getElementById("ausente").textContent = "0";
 
   // ocultar botones admin
