@@ -368,7 +368,35 @@
     font-size:30px;
     cursor:pointer;
     color:white;
-  }  
+  } 
+
+  .pass-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.pass-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-right: 35px;
+}
+
+.btn-ojo {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #94a3b8;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-ojo:hover { color: white; }
 </style>
 </head>
 <body>
@@ -384,8 +412,16 @@
 <div class="modal-overlay" id="modalPass">
   <div class="modal-box">
     <h3>Cambiar contraseña</h3>
-    <input type="password" id="oldPass" placeholder="Contraseña actual">
-    <input type="password" id="newPass" placeholder="Nueva contraseña">
+    
+    <div class="pass-wrapper">
+  <input type="password" id="oldPass" placeholder="Contraseña actual">
+  <button class="btn-ojo" onclick="togglePass('oldPass', this)" tabindex="-1">👁</button>
+</div>
+<div class="pass-wrapper">
+  <input type="password" id="newPass" placeholder="Nueva contraseña">
+  <button class="btn-ojo" onclick="togglePass('newPass', this)" tabindex="-1">👁</button>
+</div>
+
     <div class="modal-actions">
       <button class="btn-verde" onclick="cambiarPass()">Guardar</button>
       <button class="logout" onclick="cerrarModal()">Cancelar</button>
@@ -413,9 +449,16 @@
     <select id="nSectorNombre" style="display:none;">
       <option value="KSTM">KSTM</option>
       <option value="DETALL">DETALL</option>
+      <option value="DOMINIO">DOMINIO</option>
+      <option value="Ctrol COSTERA">Ctrol COSTERA</option>
     </select>
     <input id="nDni" placeholder="DNI">
-    <input id="nPass" placeholder="Contraseña">
+    
+    <div class="pass-wrapper">
+  <input type="password" id="nPass" placeholder="Contraseña">
+  <button class="btn-ojo" onclick="togglePass('nPass', this)" tabindex="-1">👁</button>
+</div>
+
     <div class="modal-actions">
       <button class="btn-verde" onclick="crearPersonal()">Guardar</button>
       <button class="logout" onclick="cerrarAlta()">Cancelar</button>
@@ -441,7 +484,12 @@
   <div class="login-box">
     <h2>Ingreso</h2>
     <input type="text" id="dni" placeholder="DNI" onkeydown="if(event.key==='Enter') ingresar()"><br>
-    <input type="password" id="pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter') ingresar()"><br>
+    
+<div class="pass-wrapper">
+  <input type="password" id="pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter') ingresar()">
+  <button class="btn-ojo" onclick="togglePass('pass', this)" tabindex="-1">👁</button>
+</div><br>
+
     <button class="btn-verde" onclick="ingresar()">Ingresar</button>
   </div>
 </div>
@@ -473,6 +521,8 @@
       <option value="TODOS">Todos</option>
       <option value="KSTM">KSTM</option>
       <option value="DETALL">DETALL</option>
+      <option value="DOMINIO">DOMINIO</option>
+      <option value="Ctrol COSTERA">Ctrol COSTERA</option>
       <option value="COAD">COAD</option>
       <option value="FINANZAS">FINANZAS</option>
       <option value="SECRETARIA">SECRETARIA</option>
@@ -516,6 +566,8 @@
       <option value="">-- Sector --</option>
       <option value="KSTM">KSTM</option>
       <option value="DETALL">DETALL</option>
+      <option value="DOMINIO">DOMINIO</option>
+      <option value="Ctrol COSTERA">Ctrol COSTERA</option>
       <option value="COAD">COAD</option>
       <option value="FINANZAS">FINANZAS</option>
       <option value="SECRETARIA">SECRETARIA</option>
@@ -568,6 +620,8 @@
       <option value="TODOS">Todos</option>
       <option value="KSTM">KSTM</option>
       <option value="DETALL">DETALL</option>
+      <option value="DOMINIO">DOMINIO</option>
+      <option value="Ctrol COSTERA">Ctrol COSTERA</option>
       <option value="COAD">COAD</option>
       <option value="FINANZAS">FINANZAS</option>
       <option value="SECRETARIA">SECRETARIA</option>
@@ -623,7 +677,7 @@
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyn9MuV--pnpmQGOOcvnNitXQc6WnzxVunw2wep_DfsbrOc2NKTCaomBLqAWsqI3qHO/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwMoPhgWTeY2iB4qlIHW7v6F7t8yz-8a7nL39Cfgea-0U1xahnjmZvNSOSfO180S9Da/exec";
 
 // ImgBB API key (gratis, subida pública de imágenes)
 // Para PDFs se usa base64 embed o se sube a imgbb como imagen de previsualización
@@ -633,6 +687,8 @@ const SECTORES_DISPLAY = {
   "Personal-KSTM": "KSTM",
   "KSTM": "KSTM",
   "DETALL": "DETALL",
+  "DOMINIO": "DOMINIO",
+  "Ctrol COSTERA": "Ctrol COSTERA",
   "COAD": "COAD",
   "FINANZAS": "FINANZAS",
   "SECRETARIA": "SECRETARIA",
@@ -853,7 +909,7 @@ function render(datos) {
 
     let tel = (fila[2] || "").toString().replace(/\D/g, "");
     let telHTML = tel
-      ? `<a href="https://wa.me/54${tel}" target="_blank" style="color:#4ade80;text-decoration:none;">📱 ${fila[2]}</a>`
+      ? `<a href="https://wa.me/549${tel}" target="_blank" style="color:#4ade80;text-decoration:none;">📱 ${fila[2]}</a>`
       : "";
 
     let esSuSector = usuarioActual.superAdmin || !usuarioActual.sector || fila[7] === usuarioActual.sector;
@@ -1688,7 +1744,7 @@ function mostrarAlta() {
   let nSectorNombre = document.getElementById("nSectorNombre");
 
   if (!usuarioActual.superAdmin) {
-    let hojaPropia = usuarioActual.sector === "KSTM" || usuarioActual.sector === "DETALL"
+    let hojaPropia = usuarioActual.sector === "KSTM" || usuarioActual.sector === "DETALL" || usuarioActual.sector === "DOMINIO" || usuarioActual.sector === "Ctrol COSTERA"
       ? "Personal-KSTM" : usuarioActual.sector;
     nSector.value    = hojaPropia;
     nSector.disabled = true;
@@ -1795,6 +1851,17 @@ function mostrarTab(tab) {
   document.querySelectorAll(".tab-btn").forEach((btn, i) => {
     btn.classList.toggle("activo", (i===0 && tab==="personal") || (i===1 && tab==="historial"));
   });
+}
+
+function togglePass(inputId, btn) {
+  let inp = document.getElementById(inputId);
+  if (inp.type === "password") {
+    inp.type = "text";
+    btn.textContent = "🙈";
+  } else {
+    inp.type = "password";
+    btn.textContent = "👁";
+  }
 }
 </script>
 </body>
